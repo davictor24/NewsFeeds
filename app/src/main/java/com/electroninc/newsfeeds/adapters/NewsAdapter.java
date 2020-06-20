@@ -2,6 +2,7 @@ package com.electroninc.newsfeeds.adapters;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     private List<News> newsList;
     private Context context;
@@ -43,10 +44,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = newsList.get(position);
-        holder.newsTitleTextView.setText(news.getTitle());
-        holder.newsSectionTextView.setText(news.getSection());
+        String title = news.getTitle();
+        String section = news.getSection();
+        String dateString = news.getDate();
+
+        holder.newsTitleTextView.setText(title);
+        holder.newsSectionTextView.setText(section.isEmpty() ? "" : "Posted in: " + section);
         try {
-            Date date = dateFormat.parse(news.getDate());
+            Date date = dateFormat.parse(dateString);
             if (date == null) throw new ParseException("Null date", -1);
             CharSequence formattedDate = DateUtils.getRelativeTimeSpanString(date.getTime(), new Date().getTime(), 0L);
             holder.newsDateTextView.setText(formattedDate);

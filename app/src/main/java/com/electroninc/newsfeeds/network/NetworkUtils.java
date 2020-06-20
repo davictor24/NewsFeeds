@@ -68,7 +68,7 @@ class NetworkUtils {
         news.add(new News("Computer chess: how the ancient game revolutionised AI",
                 "https://www.theguardian.com/plug-into-hybrid/2020/may/19/computer-chess-how-the-ancient-game-revolutionised-ai",
                 "Plug into hybrid",
-                "2020-05-19T10:14:21Z"));
+                "2020-06-19T10:14:21Z"));
         return news;
     }
 
