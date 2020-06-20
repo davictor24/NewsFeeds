@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.loader.content.AsyncTaskLoader;
 
 public class NewsLoader extends AsyncTaskLoader<String> {
-
     private String url;
+    private String cachedData = null;
 
     public NewsLoader(@NonNull Context context, String url) {
         super(context);
@@ -16,7 +16,8 @@ public class NewsLoader extends AsyncTaskLoader<String> {
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if (cachedData != null) deliverResult(cachedData);
+        else forceLoad();
     }
 
     @Override
@@ -25,4 +26,9 @@ public class NewsLoader extends AsyncTaskLoader<String> {
         return NetworkUtils.fetchNews(url);
     }
 
+    @Override
+    public void deliverResult(String data) {
+        cachedData = data;
+        super.deliverResult(data);
+    }
 }

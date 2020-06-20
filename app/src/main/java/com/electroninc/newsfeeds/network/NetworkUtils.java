@@ -1,5 +1,8 @@
 package com.electroninc.newsfeeds.network;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -18,14 +21,26 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NetworkUtils {
+class NetworkUtils {
 
     private static final String LOG_TAG = NetworkUtils.class.getName();
 
     private NetworkUtils() {
     }
 
-    public static String fetchNews(String requestUrl) {
+    static boolean isConnectedOrConnecting(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Deprecated, but the alternatives (using callbacks) require at least API 21
+        // Minimum for this app is API 15
+        // So I implemented a custom callback system using NetworkReceiver and NetworkReceiverCallback
+        //noinspection deprecation
+        NetworkInfo networkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+        //noinspection deprecation
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    static String fetchNews(String requestUrl) {
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {

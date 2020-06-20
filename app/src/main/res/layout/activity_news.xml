@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
         tools:text="Hello world" />
 
     <TextView
@@ -18,20 +17,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="No result"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:visibility="gone"
-        tools:ignore="HardcodedText" />
+        android:text="@string/nothing_was_found"
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <TextView
         android:id="@+id/not_connected_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="You are not connected to the Internet"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:visibility="gone"
-        tools:ignore="HardcodedText" />
+        android:text="@string/you_are_not_connected"
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <ProgressBar
         android:id="@+id/loading_progress_spinner"
