@@ -32,7 +32,7 @@ class NetworkUtils {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         // Deprecated, but the alternatives (using callbacks) require at least API 21
-        // Minimum for this app is API 15
+        // Minimum for this app is API 16
         // So I implemented a custom callback system using NetworkReceiver and NetworkReceiverCallback
         //noinspection deprecation
         NetworkInfo networkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;

@@ -79,7 +79,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         String searchText = "";
         if (args != null) searchText = args.getString(SEARCH_TEXT);
         String query = (searchText == null || searchText.isEmpty()) ? "" : "&q=" + searchText;
-        String url = "https://content.guardianapis.com/search?api-key=54a4d561-a782-447d-a8bb-e0370f42288b" + query;
+        String url = "https://content.guardianapis.com/search?api-key=54a4d561-a782-447d-a8bb-e0370f42288b&page-size=25" + query;
         return new NewsLoader(this, url);
     }
 
