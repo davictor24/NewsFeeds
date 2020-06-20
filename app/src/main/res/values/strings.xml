@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">News Feeds</string>
+    <string name="search_hint">Enter anything, e.g. football</string>
+    <string name="view_news_feeds">View News Feeds</string>
+    <string name="what_do_you_want">What do you want to see?</string>
+    <string name="leave_empty">(Leave empty to see all news)</string>
 </resources>
