@@ -65,7 +65,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         newsViewModel.news.observe(this, new Observer<List<News>>() {
             @Override
             public void onChanged(List<News> newsList) {
-                if (newsList.size() == 0) showNoResult();
+                if (newsList == null || newsList.size() == 0) showNoResult();
                 else {
                     NewsAdapter newsAdapter = new NewsAdapter(NewsActivity.this,
                             newsList,
