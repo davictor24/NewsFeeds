@@ -3,6 +3,8 @@ package com.electroninc.newsfeeds.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.electroninc.newsfeeds.R;
+import com.electroninc.newsfeeds.lifecycle.NewsActivityViewModel;
 import com.electroninc.newsfeeds.network.NetworkReceiver;
 import com.electroninc.newsfeeds.network.NetworkReceiverCallback;
 import com.electroninc.newsfeeds.network.NewsLoader;
@@ -24,13 +27,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String SEARCH_TEXT = "search_text";
     private static final int LOADER_ID = 1;
-    private static boolean loadFinished = false;
 
     private TextView searchResultTextView;
     private TextView noResultTextView;
     private TextView notConnectedTextView;
     private ProgressBar loadingProgressSpinner;
 
+    private NewsActivityViewModel newsViewModel;
     private Bundle loaderArgs;
     private BroadcastReceiver networkReceiver;
 
@@ -43,17 +46,23 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         notConnectedTextView = findViewById(R.id.not_connected_text_view);
         loadingProgressSpinner = findViewById(R.id.loading_progress_spinner);
 
-        Intent displayNewsIntent = getIntent();
-        loaderArgs = displayNewsIntent.getExtras();
-        // If data had been loaded, retrieve the information again from the loader
-        if (loadFinished) {
-            startLoader(loaderArgs);
-        }
-        // Else, let the network receiver load the data if connectivity is available
-        else {
+        newsViewModel = new ViewModelProvider(this).get(NewsActivityViewModel.class);
+        newsViewModel.news.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                searchResultTextView.setText(s);
+            }
+        });
+
+        // If data has not been loaded, allow the network receiver load data if/when connectivity is available
+        if (!newsViewModel.hasLoaded) {
             showNotConnected(); // Default view
+            Intent displayNewsIntent = getIntent();
+            loaderArgs = displayNewsIntent.getExtras();
             networkReceiver = new NetworkReceiver(this);
             registerNetworkReceiver();
+        } else {
+            showSearchResults();
         }
     }
 
@@ -62,8 +71,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onDestroy();
         // Unregister the network receiver if still active
         unregisterNetworkReceiver();
-
-
     }
 
     @NonNull
@@ -78,18 +85,18 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        // Set loadFinished to true so onCreate can know load status
-        loadFinished = true;
         // Network receiver is no longer needed, so unregister it
         unregisterNetworkReceiver();
-        searchResultTextView.setText(data);
+        newsViewModel.news.postValue(data);
+        newsViewModel.hasLoaded = true;
         showSearchResults();
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
-        // Loader has been reset, so set loadFinished to false
-        loadFinished = false;
+        // Remove references to data
+        newsViewModel.news.postValue("");
+        newsViewModel.hasLoaded = false;
         // Network receiver is now needed
         registerNetworkReceiver();
     }
