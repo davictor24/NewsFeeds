@@ -40,7 +40,7 @@ class NetworkUtils {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    static String fetchNews(String requestUrl) {
+    static List<News> fetchNews(String requestUrl) {
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {
@@ -48,8 +48,7 @@ class NetworkUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
-        List<News> news = extractNewsFromJson(jsonResponse);
-        return jsonResponse;
+        return extractNewsFromJson(jsonResponse);
     }
 
     private static List<News> extractNewsFromJson(String jsonResponse) {
@@ -61,7 +60,15 @@ class NetworkUtils {
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing the news JSON results", e);
         }
-
+        // TODO: remove
+        news.add(new News("Gears Tactics review – think chess with chainsaws",
+                "https://www.theguardian.com/games/2020/may/02/gears-tactics-review-gears-of-war-spinoff",
+                "Games",
+                "2020-05-02T12:00:22Z"));
+        news.add(new News("Computer chess: how the ancient game revolutionised AI",
+                "https://www.theguardian.com/plug-into-hybrid/2020/may/19/computer-chess-how-the-ancient-game-revolutionised-ai",
+                "Plug into hybrid",
+                "2020-05-19T10:14:21Z"));
         return news;
     }
 

@@ -62,7 +62,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public interface ItemClickListener {
-        void onItemClickListener(int itemId);
+        void onItemClicked(int itemId);
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -80,7 +80,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         @Override
         public void onClick(View view) {
-            itemClickListener.onItemClickListener(getAdapterPosition());
+            itemClickListener.onItemClicked(getAdapterPosition());
         }
     }
 }
