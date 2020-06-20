@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String searchText = searchEditText.getText().toString().trim();
                 Intent displayNewsIntent = new Intent(MainActivity.this, NewsActivity.class);
-                displayNewsIntent.putExtra(NewsActivity.SEARCH_TEXT, searchText);
+                Bundle args = new Bundle();
+                args.putString(NewsActivity.SEARCH_TEXT, searchText);
+                displayNewsIntent.putExtras(args);
                 startActivity(displayNewsIntent);
             }
         });
