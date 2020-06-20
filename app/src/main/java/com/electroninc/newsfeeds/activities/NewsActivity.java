@@ -14,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -100,7 +101,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         String searchText = "";
         if (args != null) searchText = args.getString(SEARCH_TEXT);
         String query = (searchText == null || searchText.isEmpty()) ? "" : "&q=" + searchText;
-        String url = "https://content.guardianapis.com/search?api-key=54a4d561-a782-447d-a8bb-e0370f42288b&page-size=25" + query;
+        String url = "https://content.guardianapis.com/search?api-key=54a4d561-a782-447d-a8bb-e0370f42288b&page-size=50" + query;
         return new NewsLoader(this, url);
     }
 
@@ -136,7 +137,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         List<News> newsList = newsViewModel.news.getValue();
         if (newsList == null) return;
         String url = newsList.get(itemId).getUrl();
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+        openBrowser(url);
+    }
+
+    public void openBrowser(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     private void startLoader(Bundle args) {
